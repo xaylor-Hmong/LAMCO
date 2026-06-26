@@ -19,12 +19,18 @@ st.caption("Pulls real-time submission records from KoboToolbox. Fully integrate
 SERVER = st.secrets.get("KOBO_SERVER", "kf.kobotoolbox.org")
 ASSET_UID = st.secrets.get("KOBO_ASSET_UID", "")
 TOKEN = st.secrets.get("KOBO_TOKEN", "")
+FORM_URL = st.secrets.get("KOBO_FORM_URL", "")
+
+if FORM_URL:
+    st.link_button("📝 Open Kobo Online Form", FORM_URL)
+    st.markdown("") # Spacer
 
 if not ASSET_UID or not TOKEN:
     st.warning("⚠️ Configuration Keys Missing inside Advanced Cloud Secrets panel. Please type tokens manually:")
-    col_creds1, col_creds2 = st.columns(2)
+    col_creds1, col_creds2, col_creds3 = st.columns([2, 2, 3])
     with col_creds1: ASSET_UID = st.text_input("Kobo Asset Form UID ID", value=ASSET_UID)
     with col_creds2: TOKEN = st.text_input("Kobo Account API Token", type="password", value=TOKEN)
+    with col_creds3: FORM_URL = st.text_input("Kobo Form Online URL", value=FORM_URL)
 
 @st.cache_data(ttl=120)
 def fetch_all_submissions(server, asset_uid, token):
