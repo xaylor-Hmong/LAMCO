@@ -21,9 +21,21 @@ ASSET_UID = st.secrets.get("KOBO_ASSET_UID", "")
 TOKEN = st.secrets.get("KOBO_TOKEN", "")
 FORM_URL = st.secrets.get("KOBO_FORM_URL", "")
 
+btn_cols = st.columns([3.2, 2.5, 3.8, 10.5])
+col_idx = 0
 if FORM_URL:
-    st.link_button("📝 Open Kobo Online Form", FORM_URL)
-    st.markdown("") # Spacer
+    with btn_cols[col_idx]:
+        st.link_button("📝 Open Kobo Online Form", FORM_URL, use_container_width=True)
+    col_idx += 1
+with btn_cols[col_idx]:
+    if st.button("🔄 Refresh List", use_container_width=True):
+        st.rerun()
+col_idx += 1
+with btn_cols[col_idx]:
+    if st.button("⚡ Force Refresh (Clear Cache)", use_container_width=True):
+        st.cache_data.clear()
+        st.rerun()
+st.markdown("") # Spacer
 
 if not ASSET_UID or not TOKEN:
     st.warning("⚠️ Configuration Keys Missing inside Advanced Cloud Secrets panel. Please type tokens manually:")
